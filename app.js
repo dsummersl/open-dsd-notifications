@@ -8,6 +8,7 @@ var express    = require('express');        // call express
 var app        = express();                 // define our app using express
 var bodyParser = require('body-parser');
 var request = require('request');
+var striptags = require('striptags');
 var url = require('url');
 var _ = require('lodash');
 
@@ -33,7 +34,8 @@ router.get('/dsd/code-enforcement', function(req, res) {
       // Change fields based on permit type. Need to make flexible for other OpenDSD types, also, need
       // to understand what the "Case Depiction" field actually does.
 
-      var titleString = "There's been a code enforcement case updated near you at: " +element.StreetAddress+".<br/> The violation is "+ element.Description +".<br/> You can find out more at: http://opendsd.sandiego.gov/web/CECases/Details/"+ element.CaseId
+      var titleString = "There's been a code enforcement case updated near you at: " +element.StreetAddress+".<br/> The violation is "+ element.Description +".<br/> You can find out more at: http://opendsd.sandiego.gov/web/CECases/Details/"+ element.CaseId;
+      titleString = striptags(titleString);
 
       var feature = {
         id: element.caseId,
@@ -74,6 +76,7 @@ router.get('/dsd/approvals', function(req, res) {
       // to understand what the "Case Depiction" field actually does.
 
       var titleString = element.ApprovalType+" approval for project \"" +element.ProjectTitle+"\".<br/> You can find out more at: http://opendsd.sandiego.gov/web/Approvals/Details/"+element.ApprovalId
+      titleString = striptags(titleString);
 
       var feature = {
         id: element.caseId,
